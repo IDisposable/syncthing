@@ -1,17 +1,8 @@
 // Copyright (C) 2014 The Syncthing Authors.
 //
-// This program is free software: you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation, either version 3 of the License, or (at your option)
-// any later version.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along
-// with this program. If not, see <http://www.gnu.org/licenses/>.
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this file,
+// You can obtain one at http://mozilla.org/MPL/2.0/.
 
 // +build integration
 
@@ -92,10 +83,7 @@ func generateFiles(dir string, files, maxexp int, srcname string) error {
 			return err
 		}
 
-		err = os.Chmod(p1, os.FileMode(rand.Intn(0777)|0400))
-		if err != nil {
-			return err
-		}
+		_ = os.Chmod(p1, os.FileMode(rand.Intn(0777)|0400))
 
 		t := time.Now().Add(-time.Duration(rand.Intn(30*86400)) * time.Second)
 		err = os.Chtimes(p1, t, t)
@@ -151,8 +139,7 @@ func alterFiles(dir string) error {
 		case r == 1 && info.Mode().IsRegular():
 			if info.Mode()&0200 != 0200 {
 				// Not owner writable. Fix.
-				err = os.Chmod(path, 0644)
-				if err != nil {
+				if err = os.Chmod(path, 0644); err != nil {
 					return err
 				}
 			}
